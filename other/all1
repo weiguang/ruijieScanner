@@ -1,6 +1,9 @@
 #!/bin/bash
 number=
 tempfile=mentemp
+#结果保存的文件
+RESULT=sunet
+RESULTx=sunetx
 stunum3=bgnxy
 stunum4=291
 i=1
