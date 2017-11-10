@@ -10,8 +10,12 @@ RESULTx=resultx.re
 #max number
 MAX_NUMBER=350
 
+#检查多少个账号不存在后跳过这个单位
+BREAK_NUMBER=5
+
 #stunum3=bgsxxy
-stunum4=1
+stunum4=312
+cheakstemp=0
 
 #test
 ok=0
@@ -54,10 +58,12 @@ function get_result() {
 	#sudo mentohust -k
         fi
 	echo $info | grep "用户不存在" 
-	#if [ $? -eq 1 ] ;then
-		#stunum4=$Max_NUMBER
+	if [ $? -eq 0 ] ;then
+		none_number=`expr $none_number + 1`
+	else
+		none_number=0
 	#sudo mentohust -k
-        #fi
+        fi
 	
 }
 
@@ -78,10 +84,14 @@ function main() {
 	> $logfile
 	i=1
 	sudo mentohust -k >/dev/null 2>&1
-	cat $1
+	#cat $1
 	for stunum3 in `cat $1`
 	do
+		none_number=0
 		while [ $stunum4 -le $MAX_NUMBER ]
+		if [ $none_number -ge $BREAK_NUMBER ] ; then
+			break;
+		fi
 		do
 			number=${stunum3}`addZero`
 			echo $number	
@@ -90,7 +100,7 @@ function main() {
 
 			i=`expr $stunum4 + 1`
 			stunum4=$i
-		done
+		done		
 		stunum4=1
 	done
 }
