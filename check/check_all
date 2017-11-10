@@ -11,6 +11,8 @@ logfile=menlog.log
 #connect time
 DELAY=8
 
+
+
 function connect() {
 	sudo mentohust -u$number -p$number -l1 -b0 -t$DELAY > $tempfile
 	#sleep $DELAY
@@ -60,7 +62,7 @@ function main() {
 	for number in `cat $1`
 	do
 		echo $number
-		echo ================$number================== >>$tempfile
+		echo ================$number================== >>$logfile
 		info=`connect` 
 		get_result
 	done
