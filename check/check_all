@@ -17,18 +17,19 @@ do
 	echo ================$number================== >>$tempfile
 	#check 
 	echo m1
-	sudo mentohust -u$number -p$number -l1 >> $tempfile &
-	echo s1
-	sleep $CONDELAY
-	sudo mentohust -k >/dev/null
-	echo s2
-	sleep 9
-	echo m2
 	sudo mentohust -u$number -p$number -b0 -l1 >> $tempfile &
-	echo s3
-	sleep $CONDELAY
+	#echo s1
+	#sleep $CONDELAY
+	#sudo mentohust -k >/dev/null
+	#echo s2
+	#sleep 9
+	#echo m2
+	#sudo mentohust -u$number -p$number -b0 -l1 >> $tempfile &
+	#echo s3
+	#sleep $CONDELAY
 	sudo mentohust -k >/dev/null 
 	#cat /tmp/mentohust.log >> $tempfile
+
 	info=`grep "提示" $tempfile | tail -1`
 	echo $info | grep "在线用户数量上限" 
 	if [ $? -eq 0 ] ;then

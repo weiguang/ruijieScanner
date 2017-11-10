@@ -7,10 +7,12 @@ mentemp
 *~
 *.swp
 
+#
+check/mentemp
+
 # result
 sunset*
 cheack/*result*
-check/mentemp
 other/sunset*
 student/sunset*
 
