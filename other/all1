@@ -1,6 +1,6 @@
 #!/bin/bash
 number=
-tempfile=mentemp
+tempfile=menlog.log
 #结果保存的文件
 RESULT=sunet
 RESULTx=sunetx

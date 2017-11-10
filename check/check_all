@@ -4,7 +4,7 @@
 RESULT=check_result
 RESULTx=check_resultx
 #连接产生的记录文件
-tempfile=mentemp
+tempfile=menlog.log
 #connect time
 CONDELAY=7
 number=
