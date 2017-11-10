@@ -24,7 +24,7 @@ do
 	echo s2
 	sleep 9
 	echo m2
-	sudo mentohust -u$number -p$number -l1 >> $tempfile &
+	sudo mentohust -u$number -p$number -b0 -l1 >> $tempfile &
 	echo s3
 	sleep $CONDELAY
 	sudo mentohust -k >/dev/null 

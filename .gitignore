@@ -1,3 +1,19 @@
+# log file
+*.log
+
+# temp file
+*.tmp
+mentemp
+*~
+*.swp
+
+# result
+sunset*
+cheack/*result*
+check/mentemp
+other/sunset*
+student/sunset*
+
 CMakeCache.txt
 CMakeFiles
 CMakeScripts
@@ -7,3 +23,4 @@ cmake_install.cmake
 install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
+
