@@ -1,19 +1,24 @@
 #!/bin/bash
-#多次检查check_resultx 文件中的学号是否在用，请确保文件存在。
+#多次检查 RESULTx 文件中的学号是否在用，请确保文件存在。
+#
 #结果保存的文件
-#RESULT=check_result
-#RESULTx=check_resultx
+RESULT=result.re
+RESULTx=resultx.re
+#连接产生的记录文件
+tempfile=mentemp.tmp
+logfile=menlog.log 
 
 check_num=2  #检查次数
 now_check=1
+
 while [ $now_check -le $check_num ]
 do 
 echo 'this is '$now_check 'times'
 sudo rm -f check_text
 #backup 
-cp  check_resultx  check_resultx_bak
+cp  $RESULTx  ${RESULTx}_bak
 #move to temp file
-mv check_resultx check_text
+mv $RESULTx check_text
 #start check
 sh check_all check_text
 now_check=`expr $now_check + 1`

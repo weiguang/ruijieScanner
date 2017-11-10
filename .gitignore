@@ -11,10 +11,8 @@ mentemp
 check/mentemp
 
 # result
-sunset*
-cheack/*result*
-other/sunset*
-student/sunset*
+*.re
+check/good_list
 
 CMakeCache.txt
 CMakeFiles

