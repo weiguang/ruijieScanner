@@ -19,7 +19,7 @@ stunum3=01
 #班级里的学号
 stunum4=01
 #学校中的最大专业数(3代表本科后面的150才是数量, before 2015)
-MAX_SUB=3999
+MAX_SUB=5999
 #专业中的最大班级数
 MAX_CLASS=30
 #班里的最大学生数
@@ -89,66 +89,62 @@ cheakstemp=0
 cheakctemp=0
 #class
 while [ $stunum3 -le $MAX_CLASS ]
-do
-#student
-if [ $cheakctemp -lt $cheakcnum ] ; then
-echo "专业：$stunum2  班级：$stunum3"
-while [ $stunum4 -le $MAX_STU ]
-do
-	if [ $cheakstemp -ge $cheaknum ] ;then
-	stunum4=01
-	cheakstemp=0
-	cheakctemp=`expr $cheakctemp + 1`
-	echo "跳过当前班级！"
-	break
-	fi #end cheakstemp
+	do
+	#student
+	if [ $cheakctemp -lt $cheakcnum ] ; then
+		echo "专业：$stunum2  班级：$stunum3"
+		while [ $stunum4 -le $MAX_STU ]
+		do
+			if [ $cheakstemp -ge $cheaknum ] ;then
+				stunum4=01
+				cheakstemp=0
+				cheakctemp=`expr $cheakctemp + 1`
+				echo "跳过当前班级！"
+				break
+			fi #end cheakstemp
+			number=$stunum1$stunum2$stunum3$stunum4
+			#checkNumber
+			checkNumber $number 		
 
-	number=$stunum1$stunum2$stunum3$stunum4
+			i=`expr $stunum4 + 1`
+			if [ $i -le 9 ] ; then
+				stunum4=0$i
+			else
+				stunum4=$i
+			fi
+		#	echo $stunum4
+			if [ $stunum4 -gt $MAX_STU ];then 
+				break
+			fi #end cheak students
+			#echo "sleep 2s"
+			#sleep 2
+		done
 	
-	#checkNumber
-	checkNumber $number 		
-	
-
-	i=`expr $stunum4 + 1`
-	if [ $i -le 9 ] ; then
-	stunum4=0$i
-	else
-	stunum4=$i
-	fi
-#	echo $stunum4
-	if [ $stunum4 -gt 99 ];then 
-	break
-	fi #end cheak students
-	#echo "sleep 2s"
-	#sleep 2
-done
-	
-	j=`expr $stunum3 + 1`
-        if [ $j -le 9 ] ; then
-        stunum3=0$j
-        else
-        stunum3=$j
-        fi
-        if [ $stunum3 -gt 30 ];then
-        break
-        fi
-	stunum4=01
+		j=`expr $stunum3 + 1`
+		if [ $j -le 9 ] ; then
+			stunum3=0$j
+		else
+			stunum3=$j
+		fi
+		if [ $stunum3 -gt $MAX_CLASS ];then
+			break
+		fi
+		stunum4=01
 
 	else #需要跳过当前专业
-	cheakstemp=0
-        cheakctemp=0
-	stunum4=01
-	stunum3=01
-	stunum2=`expr $stunum2 + 100`
-	echo "跳过当前专业！"   
+		cheakstemp=0
+		cheakctemp=0
+		stunum4=01
+		stunum3=01
+		stunum2=`expr $stunum2 + 100`
+		echo "跳过当前专业！"   
 	fi #end cheakctemp
-	#sleep 3
-done
+			#sleep 3
+	done
 	stunum2=`expr $stunum2 + 1`
 	stunum3=01
 	#sleep 2
 done
-
 }
 
 main
