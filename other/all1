@@ -10,7 +10,7 @@ RESULTx=resultx.re
 #max number
 MAX_NUMBER=350
 
-stunum3=bgsxxy
+#stunum3=bgsxxy
 stunum4=1
 
 #test
@@ -61,6 +61,18 @@ function get_result() {
 	
 }
 
+function addZero() {
+	if [ $stunum4 -le 9 ] ; then
+		stunum4="00"$stunum4
+		else
+			if [ $stunum4 -le 99 ] ; then
+				stunum4="0"$stunum4
+			fi
+	fi
+	
+	echo $stunum4
+}
+
 function main() {
 	> $tempfile
 	> $logfile
@@ -71,18 +83,8 @@ function main() {
 	do
 		while [ $stunum4 -le $MAX_NUMBER ]
 		do
-			if [ $stunum4 -le 9 ] ; then
-			number=$stunum3"00"$stunum4
-			else
-				if [ $stunum4 -le 99 ] ; then
-				number=$stunum3"0"$stunum4
-				else
-				number=$stunum3$stunum4
-				fi
-			fi	
-			echo $number
-		#	echo $stunum4
-
+			number=${stunum3}`addZero`
+			echo $number	
 			info=`connect` 
 			get_result
 
