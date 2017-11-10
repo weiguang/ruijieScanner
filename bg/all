@@ -63,8 +63,7 @@ function get_result() {
 	else
 		none_number=0
 	#sudo mentohust -k
-        fi
-	
+        fi	
 }
 
 function addZero() {
