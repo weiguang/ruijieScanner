@@ -136,7 +136,7 @@ while [ $stunum3 -le $MAX_CLASS ]
 		cheakctemp=0
 		stunum4=01
 		stunum3=01
-		stunum2=`expr $stunum2 + 100`
+		stunum2=`expr $stunum2 + 100` #和前一个版本的主要区别
 		echo "跳过当前专业！"   
 	fi #end cheakctemp
 			#sleep 3
